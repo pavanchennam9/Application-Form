@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Registration Form</title>
+    <!--Here the link of the bootstrap which can already done the styling part of the css-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!--Here Iam using the internal css for applying styles to html page-->
+    <style>
+      /*This is style is applying for the body of the html page*/
+      body {
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        /*Applying color to page */
+        display: flex;
+        /*Iam taking display can be flex for flexibility*/
+        justify-content: center;
+        /*Card can be horizontally centre*/
+        align-items: center;
+        /*Card can be vertically centre*/
+        min-height: 100vh;
+        /*Fixing height has minimum for better experience*/
+      }
+
+      .card {
+        max-width: 500px;
+        /*Taking Card size is 500px it can be maximum width*/
+        width: 100%;
+        /*Taking width is 100% */
+        border-radius: 15px;
+        /*Radius of Card is 15px*/
+        padding: 30px;
+        /*Padding can be 30px*/
+      }
+
+      /*Here ,some of styles can be applied.The remaining styles can be applied in the Bootstrap. */
+    </style>
+  </head>
+
+  <body>
+    <div class="card shadow">
+      <h3 class="text-center mb-4">Register</h3>
+      <form id="registerForm" novalidate>
+        <div class="mb-3">
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            placeholder="Full Name"
+          />
+          <div class="invalid-feedback">
+            Name must be at least 5 characters.
+          </div>
+        </div>
+        <div class="mb-3">
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            placeholder="Email ID"
+          />
+          <div class="invalid-feedback">Enter a valid email.</div>
+        </div>
+        <div class="mb-3">
+          <input
+            type="text"
+            id="phone"
+            class="form-control"
+            placeholder="Phone Number"
+          />
+          <div class="invalid-feedback">
+            Enter a valid 10-digit phone number.
+          </div>
+        </div>
+        <div class="mb-3">
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Password"
+          />
+          <div class="invalid-feedback">
+            Password must be at least 8 characters and not "password" or your
+            name.
+          </div>
+        </div>
+        <div class="mb-3">
+          <input
+            type="password"
+            id="confirm"
+            class="form-control"
+            placeholder="Confirm Password"
+          />
+          <div class="invalid-feedback">Passwords do not match.</div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+      </form>
+    </div>
+    <script>
+      //Here Iam created the names for each one for invoking it.By using the ID of that.
+      const form = document.getElementById("registerForm");
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const phone = document.getElementById("phone");
+      const password = document.getElementById("password");
+      const confirm = document.getElementById("confirm");
+
+      //This is usually done to visually indicate that there's an error in the user's input (like leaving a required field empty or entering an invalid email)..
+      function showError(input) {
+        input.classList.add("is-invalid");
+      }
+
+      //It removes the "is-invalid" class from the input element, which is typically used to clear any previous error styling when the user corrects their input..
+      function clearError(input) {
+        input.classList.remove("is-invalid");
+      }
+
+      //The function validate() you're writing to be part of a form validation script...
+      //trim() method is used to separate the each character of user input..
+      function validate() {
+        //Initally the form is true.
+        let valid = true;
+        const nameVal = name.value.trim();
+        const emailVal = email.value.trim();
+        const phoneVal = phone.value.trim();
+        const passVal = password.value;
+        const confirmVal = confirm.value;
+
+        // Name validation
+        //The name enter by the user is checks here..
+        if (nameVal.length < 5) {
+          //The name not less than 5
+          showError(name);
+          valid = false;
+        } //Otherwise
+        else clearError(name);
+        //The name less than 5
+
+        // Email validation
+        //The Email enter by the user is checks here.
+        if (!emailVal.includes("@")) {
+          //The Email not consists of @ symbol..
+          showError(email);
+          valid = false;
+        } //otherwise
+        else clearError(email);
+        //The Email must be consists of @ symbol..
+
+        // Phone validation
+        //The number enter by the user is checks here.
+        if (
+          //The number not in consists of 10 digits & It cannot be in the order of "123456789"..
+          phoneVal.length !== 10 ||
+          phoneVal === "1234567890" ||
+          isNaN(phoneVal)
+        ) {
+          showError(phone);
+          valid = false;
+        } //otherwise
+        else clearError(phone);
+        //The number must be consists of 10 digits & It cannot be in the order of "123456789"..
+
+        // Password validation
+        //The password enter by the user is checks here.
+        if (
+          //Here the password not consists of 8 digits & It cannot be the "password" and "Name enter by the user"..
+          passVal.length < 8 ||
+          passVal.toLowerCase() === "password" ||
+          passVal.toLowerCase() === nameVal.toLowerCase()
+          //toLowerCase() it is used to convert the letters into lowercase letters...
+        ) {
+          showError(password);
+          valid = false;
+        } //otherwise
+        else clearError(password);
+        ////Here the password must be 8 digits & It cannot be the "password" and "Name enter by the user"..
+
+        // Confirm password
+        //The user can confirm the password
+        if (passVal !== confirmVal) {
+          //The password and confirm password is must be not equal..
+          showError(confirm);
+          valid = false;
+        } else clearError(confirm);
+        //The password and confirm password is must be equal..
+
+        return valid;
+      }
+
+      //If user clicks the submit button then this action will done
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (validate()) {
+          //If the user enter information is correct then only the form can be submited ..
+          alert("Form submitted successfully!");
+          form.reset();
+          //After the submitted the form can be reset
+          document
+            .querySelectorAll(".form-control")
+            .forEach((input) => input.classList.remove("is-invalid"));
+        } else {
+          //If the user entered information is incorrect the form not submited...
+          alert("Please fix errors in the form.");
+          //alert() is used to give the information to user..
+        }
+      });
+    </script>
+  </body>
+</html>
